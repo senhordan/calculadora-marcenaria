@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Gavetas & Corrediças para Marcenaria</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wood: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            500: '#d97706',
+                            600: '#b45309',
+                            700: '#78350f',
+                            800: '#451a03',
+                            900: '#290e02',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados e ajustes para mobile */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans pb-12 antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-10 shadow-md">
+        <div class="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-amber-500 text-slate-950 p-2.5 rounded-xl shadow-lg">
+                    <i class="fa-solid fa-[# ruler-combined] fa-ruler-combined text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-white leading-tight">CalcGaveta Pro</h1>
+                    <p class="text-xs text-amber-400 font-medium">Marcenaria de Precisão</p>
+                </div>
+            </div>
+            <button onclick="limparCampos()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 py-1.5 px-3 rounded-lg border border-slate-600 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-rotate-left"></i> Limpar
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-4 pt-6 space-y-6">
+
+        <!-- Formulário de Entrada de Dados -->
+        <form id="drawerForm" onsubmit="calcular(event)" class="bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl p-5 shadow-xl space-y-5">
+            <div class="border-b border-slate-700/60 pb-3 flex items-center justify-between">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-[# sliders] fa-sliders text-amber-500"></i> Medidas do Vão & Gavetas
+                </h2>
+                <span class="text-xs text-slate-400">Medidas em <b>mm</b></span>
+            </div>
+
+            <!-- Grid de Inputs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- Altura do Vão -->
+                <div class="space-y-1.5">
+                    <label for="alturaVao" class="block text-xs font-medium text-slate-300">
+                        1. Altura Total do Vão (mm)
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="alturaVao" required min="1" step="0.5" placeholder="Ex: 800"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-base font-semibold">
+                        <span class="absolute right-3 top-3.5 text-xs text-slate-500 font-medium">mm</span>
+                    </div>
+                </div>
+
+                <!-- Quantidade de Gavetas -->
+                <div class="space-y-1.5">
+                    <label for="qtdGavetas" class="block text-xs font-medium text-slate-300">
+                        2. Quantidade de Gavetas
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="qtdGavetas" required min="1" max="20" step="1" placeholder="Ex: 4"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-base font-semibold">
+                        <span class="absolute right-3 top-3.5 text-xs text-slate-500 font-medium">unid</span>
+                    </div>
+                </div>
+
+                <!-- Altura da Frente da Gaveta -->
+                <div class="space-y-1.5">
+                    <label for="alturaFrente" class="block text-xs font-medium text-slate-300">
+                        3. Altura da Frente da Gaveta (mm)
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="alturaFrente" required min="1" step="0.5" placeholder="Ex: 131"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-base font-semibold">
+                        <span class="absolute right-3 top-3.5 text-xs text-slate-500 font-medium">mm</span>
+                    </div>
+                </div>
+
+                <!-- Altura da Lateral da Gaveta -->
+                <div class="space-y-1.5">
+                    <label for="alturaLateral" class="block text-xs font-medium text-slate-300">
+                        4. Altura da Lateral da Gaveta (mm)
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="alturaLateral" required min="1" step="0.5" placeholder="Ex: 100"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-base font-semibold">
+                        <span class="absolute right-3 top-3.5 text-xs text-slate-500 font-medium">mm</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Preset Folga Inferior -->
+            <div class="space-y-2 pt-2 border-t border-slate-700/60">
+                <label class="block text-xs font-medium text-slate-300">
+                    5. Folga Inferior / Tipo de Móvel
+                </label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <button type="button" onclick="selecionarPreset(15, this)" class="preset-btn bg-slate-900 border border-amber-500/50 hover:bg-slate-700 text-slate-200 text-xs py-2.5 px-2 rounded-xl transition text-center font-medium active shadow-sm">
+                        <div class="font-bold text-amber-400">15 mm</div>
+                        <div class="text-[10px] text-slate-400">Porta de Correr</div>
+                    </button>
+                    <button type="button" onclick="selecionarPreset(10, this)" class="preset-btn bg-slate-900 border border-slate-700 hover:bg-slate-700 text-slate-200 text-xs py-2.5 px-2 rounded-xl transition text-center font-medium">
+                        <div class="font-bold text-amber-400">10 mm</div>
+                        <div class="text-[10px] text-slate-400">Porta de Giro</div>
+                    </button>
+                    <button type="button" onclick="selecionarPreset(4, this)" class="preset-btn bg-slate-900 border border-slate-700 hover:bg-slate-700 text-slate-200 text-xs py-2.5 px-2 rounded-xl transition text-center font-medium">
+                        <div class="font-bold text-amber-400">4 mm</div>
+                        <div class="text-[10px] text-slate-400">Gaveteiro Comum</div>
+                    </button>
+                    <button type="button" onclick="ativarPersonalizado(this)" class="preset-btn bg-slate-900 border border-slate-700 hover:bg-slate-700 text-slate-200 text-xs py-2.5 px-2 rounded-xl transition text-center font-medium">
+                        <div class="font-bold text-amber-400">Outro</div>
+                        <div class="text-[10px] text-slate-400">Manual</div>
+                    </button>
+                </div>
+                
+                <!-- Campo para Folga Personalizada (Oculto por padrão) -->
+                <div id="customFolgaContainer" class="hidden mt-2">
+                    <div class="relative">
+                        <input type="number" id="folgaInferior" min="0" step="0.5" value="15" placeholder="Digite a folga inferior em mm"
+                            class="w-full bg-slate-900 border border-amber-500 rounded-xl px-3.5 py-2.5 text-white placeholder-slate-500 focus:outline-none text-sm font-semibold">
+                        <span class="absolute right-3 top-3 text-xs text-slate-500 font-medium">mm (Folga da Base)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão Calcular -->
+            <button type="submit" 
+                class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-amber-500/20 active:scale-[0.99] transition flex items-center justify-center gap-2 text-base">
+                <i class="fa-solid fa-calculator text-lg"></i> CALCULAR MARCAÇÕES
+            </button>
+        </form>
+
+        <!-- Container de Alerta / Erros -->
+        <div id="alertBox" class="hidden bg-rose-950/80 border border-rose-600 text-rose-200 p-4 rounded-2xl text-sm flex items-start gap-3 shadow-lg">
+            <i class="fa-solid fa-circle-exclamation text-rose-400 text-xl mt-0.5"></i>
+            <div>
+                <strong class="font-semibold block text-rose-300">Verifique os dados informados:</strong>
+                <span id="alertMessage">A soma das frentes ultrapassa o tamanho total do vão.</span>
+            </div>
+        </div>
+
+        <!-- Painel de Resultados -->
+        <div id="resultadosSection" class="hidden space-y-6">
+
+            <!-- Resumo Técnico (Cards Informativos) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                
+                <!-- Espaço entre frentes / Puxador -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 shadow-md flex items-center gap-3">
+                    <div class="bg-amber-500/10 border border-amber-500/30 text-amber-400 p-3 rounded-xl">
+                        <i class="fa-solid fa-grip-lines text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">Espaço entre Frentes (Puxador)</div>
+                        <div class="text-xl font-extrabold text-white" id="resEspacoGavetas">0 mm</div>
+                    </div>
+                </div>
+
+                <!-- Centro da Corrediça na Caixa -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 shadow-md flex items-center gap-3">
+                    <div class="bg-amber-500/10 border border-amber-500/30 text-amber-400 p-3 rounded-xl">
+                        <i class="fa-solid fa-[# border-center-h] fa-arrows-left-right-to-line text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">Centro na Gaveta (Eixo)</div>
+                        <div class="text-xl font-extrabold text-white" id="resCentroGaveta">0 mm</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tabela / Lista de Alturas das Corrediças na Lateral do Vão -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden shadow-xl">
+                <div class="bg-slate-800/90 border-b border-slate-700 p-4 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-white text-base flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-amber-500"></i> Marcação na Lateral do Móvel
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Medir sempre da <b>base interna do vão para cima</b></p>
+                    </div>
+                    <span class="bg-amber-500/20 text-amber-400 text-xs px-2.5 py-1 rounded-full border border-amber-500/30 font-medium">
+                        De Baixo para Cima
+                    </span>
+                </div>
+
+                <!-- Lista dos Pontos de Marcação -->
+                <div id="listaCorredicas" class="divide-y divide-slate-700/60">
+                    <!-- Gerado via JavaScript -->
+                </div>
+
+                <div class="bg-slate-900/60 p-3 text-center border-t border-slate-700/60">
+                    <p class="text-xs text-slate-400">
+                        <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> <b>Dica rápida:</b> Alinhe o centro do trilho da corrediça exatamente nesta medida na lateral do móvel.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Função para tratar o clique nos presets de folga inferior
+        function selecionarPreset(valor, elemento) {
+            document.getElementById('folgaInferior').value = valor;
+            document.getElementById('customFolgaContainer').classList.add('hidden');
+
+            // Atualiza o estilo visual dos botões de preset
+            const botoes = document.querySelectorAll('.preset-btn');
+            botoes.forEach(btn => {
+                btn.classList.remove('border-amber-500', 'bg-amber-500/10');
+                btn.classList.add('border-slate-700', 'bg-slate-900');
+            });
+
+            elemento.classList.remove('border-slate-700', 'bg-slate-900');
+            elemento.classList.add('border-amber-500', 'bg-amber-500/10');
+        }
+
+        function ativarPersonalizado(elemento) {
+            document.getElementById('customFolgaContainer').classList.remove('hidden');
+            document.getElementById('folgaInferior').focus();
+
+            const botoes = document.querySelectorAll('.preset-btn');
+            botoes.forEach(btn => {
+                btn.classList.remove('border-amber-500', 'bg-amber-500/10');
+                btn.classList.add('border-slate-700', 'bg-slate-900');
+            });
+
+            elemento.classList.remove('border-slate-700', 'bg-slate-900');
+            elemento.classList.add('border-amber-500', 'bg-amber-500/10');
+        }
+
+        // Função de Limpeza de Formulário
+        function limparCampos() {
+            document.getElementById('drawerForm').reset();
+            document.getElementById('resultadosSection').classList.add('hidden');
+            document.getElementById('alertBox').classList.add('hidden');
+            
+            // Restaura o preset padrão (15mm)
+            const primeiroPreset = document.querySelectorAll('.preset-btn')[0];
+            selecionarPreset(15, primeiroPreset);
+        }
+
+        // Função Principal do Cálculo
+        function calcular(e) {
+            e.preventDefault();
+
+            // Esconder caixa de erros previa
+            const alertBox = document.getElementById('alertBox');
+            alertBox.classList.add('hidden');
+
+            // Leitura dos valores de entrada
+            const vao = parseFloat(document.getElementById('alturaVao').value);
+            const qtd = parseInt(document.getElementById('qtdGavetas').value);
+            const frente = parseFloat(document.getElementById('alturaFrente').value);
+            const lateral = parseFloat(document.getElementById('alturaLateral').value);
+            const folgaInferior = parseFloat(document.getElementById('folgaInferior').value) || 0;
+
+            // Validações lógicas básicas
+            const alturaTotalFrentes = frente * qtd;
+            if (alturaTotalFrentes + folgaInferior >= vao) {
+                mostrarErro(`A altura total das frentes (${alturaTotalFrentes}mm) somada à folga inferior (${folgaInferior}mm) excede ou iguala o espaço livre do vão (${vao}mm). Diminua o tamanho da frente ou a quantidade.`);
+                return;
+            }
+
+            if (lateral > frente) {
+                mostrarErro(`A lateral da gaveta (${lateral}mm) é maior do que a frente (${frente}mm). Isso costuma causar sobreposição física.`);
+                return;
+            }
+
+            // --- FÓRMULAS ---
+            
+            // 1. Espaçamento entre gavetas (Espaço do puxador)
+            // Fórmula: (Vão - TotalFrentes - FolgaInferior) / QtdGavetas
+            const espacamento = (vao - alturaTotalFrentes - folgaInferior) / qtd;
+
+            // 2. Centro da Corrediça na Gaveta (Metade da lateral)
+            const centroCorredica = lateral / 2;
+
+            // Exibir Resumos
+            document.getElementById('resEspacoGavetas').innerText = `${espacamento.toFixed(1).replace('.0', '')} mm`;
+            document.getElementById('resCentroGaveta').innerText = `${centroCorredica.toFixed(1).replace('.0', '')} mm`;
+
+            // 3. Cálculo das alturas de fixação das corrediças na lateral do vão
+            const containerLista = document.getElementById('listaCorredicas');
+            containerLista.innerHTML = '';
+
+            for (let i = 0; i < qtd; i++) {
+                // Fórmula: FolgaInferior + ((Frente + Espaçamento) * i) + CentroCorredica
+                const alturaCorredica = folgaInferior + ((frente + espacamento) * i) + centroCorredica;
+                const numeroGaveta = i + 1;
+
+                const itemHTML = `
+                    <div class="p-4 flex items-center justify-between hover:bg-slate-700/30 transition">
+                        <div class="flex items-center space-x-3.5">
+                            <span class="w-8 h-8 rounded-full bg-slate-700 text-amber-400 font-bold text-sm flex items-center justify-center border border-slate-600">
+                                ${numeroGaveta}ª
+                            </span>
+                            <div>
+                                <div class="text-sm font-semibold text-white">Gaveta ${numeroGaveta} (de baixo)</div>
+                                <div class="text-xs text-slate-400">Marcação do eixo central da corrediça</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xl font-black text-amber-400 tracking-tight">${alturaCorredica.toFixed(1).replace('.0', '')}</span>
+                            <span class="text-xs text-slate-400 font-medium ml-0.5">mm</span>
+                        </div>
+                    </div>
+                `;
+                containerLista.innerHTML += itemHTML;
+            }
+
+            // Mostra o container de resultados
+            document.getElementById('resultadosSection').classList.remove('hidden');
+
+            // Rola suavemente até os resultados (útil em telas menores)
+            document.getElementById('resultadosSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function mostrarErro(mensagem) {
+            const alertBox = document.getElementById('alertBox');
+            document.getElementById('alertMessage').innerText = mensagem;
+            alertBox.classList.remove('hidden');
+            document.getElementById('resultadosSection').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
